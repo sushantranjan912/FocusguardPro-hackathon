@@ -21,10 +21,10 @@ FocusGuard is a productivity tool with two parts:
 4. The extension will appear in the Chrome toolbar  
 
 ## Team Members
-- Sushant Ranjan (@yourusername)  
-- Friend 1 (@username1)  
-- Friend 2 (@username2)  
-- Friend 3 (@username3)  
+- Sushant Ranjan (@sushantranjan219)  
+- Shoeb Raza (@razashoeb840)  
+- Ankit Kumar(@Ankit-298)  
+- Abhishek Kumar (@abhishekshah9910)  
 
 ## License
 MIT
