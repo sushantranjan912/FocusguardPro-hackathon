@@ -6,7 +6,7 @@ FocusGuard is a productivity tool with two parts:
 2. **Chrome Extension** → `extension/` folder (blocks distracting sites)
 
 ## Live Website
-*(Optional: Add Netlify or GitHub Pages link here)*
+https://focusguardpro.netlify.app/
 
 ## How to Run
 
@@ -24,7 +24,8 @@ FocusGuard is a productivity tool with two parts:
 - Sushant Ranjan (@sushantranjan219)  
 - Shoeb Raza (@razashoeb840)  
 - Ankit Kumar(@Ankit-298)  
-- Abhishek Kumar (@abhisheksah9910)  
+- Abhishek Kumar (@abhisheksah9910)
+
 
 ## License
 MIT
