@@ -24,7 +24,7 @@ FocusGuard is a productivity tool with two parts:
 - Sushant Ranjan (@sushantranjan219)  
 - Shoeb Raza (@razashoeb840)  
 - Ankit Kumar(@Ankit-298)  
-- Abhishek Kumar (@abhishekshah9910)  
+- Abhishek Kumar (@abhisheksah9910)  
 
 ## License
 MIT
