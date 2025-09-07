@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FocusGuard — Advanced Productivity Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+
+    :root, body.theme-light {
+      --primary: #6366f1;
+      --secondary: #3730a3;
+      --accent: #8b5cf6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #06b6d4;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+      --text: #111827;
+      --border: rgba(0,0,0,0.08);
+      --shadow: 0 8px 32px rgba(0,0,0,0.08);
+      --glass: rgba(255,255,255,0.95);
+      --radius: 16px;
+      --gradient-main: linear-gradient(135deg, var(--primary), var(--accent));
+      --gradient-timer: linear-gradient(135deg, #4e34e5, #c4b5fd);
+      --gradient-break: linear-gradient(135deg, #06b6d4, #38bdf8);
+      --gradient-todo-completed: linear-gradient(135deg, #10b981, #34d399);
+      --gradient-todo-pending: linear-gradient(135deg, #a5b4fc, #6366f1);
+      --gradient-achievement-progress: linear-gradient(90deg, #6366f1, #c4b5fd);
+    }
+
+    body.theme-dark {
+      --primary: #a5b4fc;
+      --secondary: #6366f1;
+      --accent: #c4b5fd;
+      --success: #34d399;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #06b6d4;
+      --muted: #94a3b8;
+      --bg-start: #111827;
+      --bg-end: #1f2937;
+      --card-bg: #1e293b;
+      --text: #f1f5f9;
+      --border: rgba(255,255,255,0.1);
+      --shadow: 0 8px 32px rgba(0,0,0,0.3);
+      --glass: rgba(30, 41, 59, 0.8);
+      --gradient-main: linear-gradient(135deg, #4e34e5, #8b5cf6);
+      --gradient-timer: linear-gradient(135deg, #a5b4fc, #c4b5fd);
+      --gradient-break: linear-gradient(135deg, #06b6d4, #67e8f9);
+      --gradient-todo-completed: linear-gradient(135deg, #34d399, #10b981);
+      --gradient-todo-pending: linear-gradient(135deg, #3b82f6, #6366f1);
+      --gradient-achievement-progress: linear-gradient(90deg, #6366f1, #a5b4fc);
+    }
+    
+    body.theme-cosmic {
+        --primary: #8b5cf6;
+        --secondary: #6d28d9;
+        --accent: #d946ef;
+        --success: #34d399;
+        --warning: #fb923c;
+        --danger: #f87171;
+        --info: #22d3ee;
+        --muted: #a1a1aa;
+        --bg-start: #0f0f1d;
+        --bg-end: #251a3d;
+        --card-bg: rgba(21, 15, 33, 0.8);
+        --text: #e0e7ff;
+        --border: rgba(255,255,255,0.15);
+        --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        --glass: rgba(21, 15, 33, 0.9);
+        --gradient-main: linear-gradient(135deg, #a855f7, #e91e63);
+        --gradient-timer: linear-gradient(135deg, #d8b4fe, #ec4899);
+        --gradient-break: linear-gradient(135deg, #22d3ee, #67e8f9);
+        --gradient-todo-completed: linear-gradient(135deg, #10b981, #34d399);
+        --gradient-todo-pending: linear-gradient(135deg, #818cf8, #a855f7);
+        --gradient-achievement-progress: linear-gradient(90deg, #a855f7, #f472b6);
+    }
+
+    body.theme-sunset {
+        --primary: #f97316;
+        --secondary: #c2410c;
+        --accent: #f59e0b;
+        --success: #34d399;
+        --warning: #facc15;
+        --danger: #dc2626;
+        --info: #0ea5e9;
+        --muted: #a3a3a3;
+        --bg-start: #fff7ed;
+        --bg-end: #fef3c7;
+        --card-bg: #ffffff;
+        --text: #1f2937;
+        --border: rgba(0,0,0,0.1);
+        --shadow: 0 8px 32px rgba(0,0,0,0.1);
+        --glass: rgba(255,255,255,0.9);
+        --gradient-main: linear-gradient(135deg, #f97316, #f59e0b);
+        --gradient-timer: linear-gradient(135deg, #fdb076, #fca5a5);
+        --gradient-break: linear-gradient(135deg, #0ea5e9, #38bdf8);
+        --gradient-todo-completed: linear-gradient(135deg, #10b981, #34d399);
+        --gradient-todo-pending: linear-gradient(135deg, #fca5a5, #f87171);
+        --gradient-achievement-progress: linear-gradient(90deg, #f97316, #fcd34d);
+    }
+
+    body.theme-ocean {
+        --primary: #06b6d4;
+        --secondary: #083344;
+        --accent: #22d3ee;
+        --success: #34d399;
+        --warning: #fb923c;
+        --danger: #ef4444;
+        --info: #0ea5e9;
+        --muted: #a1a1aa;
+        --bg-start: #0f172a;
+        --bg-end: #0c4a6e;
+        --card-bg: rgba(12, 74, 110, 0.8);
+        --text: #e0f2fe;
+        --border: rgba(255,255,255,0.15);
+        --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        --glass: rgba(12, 74, 110, 0.9);
+        --gradient-main: linear-gradient(135deg, #0ea5e9, #67e8f9);
+        --gradient-timer: linear-gradient(135deg, #0ea5e9, #a5f3fc);
+        --gradient-break: linear-gradient(135deg, #d1d5db, #6b7280);
+        --gradient-todo-completed: linear-gradient(135deg, #34d399, #10b981);
+        --gradient-todo-pending: linear-gradient(135deg, #a5f3fc, #06b6d4);
+        --gradient-achievement-progress: linear-gradient(90deg, #0ea5e9, #67e8f9);
+    }
+
+    body.theme-forest {
+        --primary: #15803d;
+        --secondary: #166534;
+        --accent: #4ade80;
+        --success: #34d399;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #0ea5e9;
+        --muted: #a3a3a3;
+        --bg-start: #1c2620;
+        --bg-end: #343f35;
+        --card-bg: rgba(28, 38, 32, 0.8);
+        --text: #dcfce7;
+        --border: rgba(255,255,255,0.15);
+        --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        --glass: rgba(28, 38, 32, 0.9);
+        --gradient-main: linear-gradient(135deg, #16a34a, #4ade80);
+        --gradient-timer: linear-gradient(135deg, #15803d, #86efac);
+        --gradient-break: linear-gradient(135deg, #f59e0b, #fcd34d);
+        --gradient-todo-completed: linear-gradient(135deg, #34d399, #10b981);
+        --gradient-todo-pending: linear-gradient(135deg, #86efac, #15803d);
+        --gradient-achievement-progress: linear-gradient(90deg, #16a34a, #d9f99d);
+    }
+    
+    body.theme-fire {
+        --primary: #f87171;
+        --secondary: #b91c1c;
+        --accent: #fb923c;
+        --success: #34d399;
+        --warning: #facc15;
+        --danger: #dc2626;
+        --info: #0ea5e9;
+        --muted: #a3a3a3;
+        --bg-start: #230a0d;
+        --bg-end: #3d1a1a;
+        --card-bg: rgba(61, 26, 26, 0.8);
+        --text: #fee2e2;
+        --border: rgba(255,255,255,0.15);
+        --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        --glass: rgba(61, 26, 26, 0.9);
+        --gradient-main: linear-gradient(135deg, #f97316, #ef4444);
+        --gradient-timer: linear-gradient(135deg, #fb923c, #f87171);
+        --gradient-break: linear-gradient(135deg, #38bdf8, #67e8f9);
+        --gradient-todo-completed: linear-gradient(135deg, #34d399, #10b981);
+        --gradient-todo-pending: linear-gradient(135deg, #fca5a5, #ef4444);
+        --gradient-achievement-progress: linear-gradient(90deg, #fb923c, #fca5a5);
+    }
+    
+    body.theme-midnight {
+        --primary: #5850ec;
+        --secondary: #1e1b4b;
+        --accent: #a78bfa;
+        --success: #34d399;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #06b6d4;
+        --muted: #94a3b8;
+        --bg-start: #0f172a;
+        --bg-end: #0c0a0c;
+        --card-bg: rgba(26, 26, 36, 0.9);
+        --text: #f1f5f9;
+        --border: rgba(255,255,255,0.1);
+        --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        --glass: rgba(26, 26, 36, 0.8);
+        --gradient-main: linear-gradient(135deg, #4c28f0, #9333ea);
+        --gradient-timer: linear-gradient(135deg, #818cf8, #a78bfa);
+        --gradient-break: linear-gradient(135deg, #06b6d4, #22d3ee);
+        --gradient-todo-completed: linear-gradient(135deg, #34d399, #10b981);
+        --gradient-todo-pending: linear-gradient(135deg, #6366f1, #4c28f0);
+        --gradient-achievement-progress: linear-gradient(90deg, #4c28f0, #818cf8);
+    }
+
+    body.theme-synthwave {
+        --primary: #ec4899;
+        --secondary: #831843;
+        --accent: #22d3ee;
+        --success: #34d399;
+        --warning: #facc15;
+        --danger: #ef4444;
+        --info: #0ea5e9;
+        --muted: #a1a1aa;
+        --bg-start: #110825;
+        --bg-end: #2a114f;
+        --card-bg: rgba(30, 15, 60, 0.8);
+        --text: #f0f0ff;
+        --border: rgba(255,255,255,0.15);
+        --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        --glass: rgba(30, 15, 60, 0.9);
+        --gradient-main: linear-gradient(135deg, #f43f5e, #c026d3);
+        --gradient-timer: linear-gradient(135deg, #f472b6, #a78bfa);
+        --gradient-break: linear-gradient(135deg, #22d3ee, #67e8f9);
+        --gradient-todo-completed: linear-gradient(135deg, #34d399, #10b981);
+        --gradient-todo-pending: linear-gradient(135deg, #d8b4fe, #ec4899);
+        --gradient-achievement-progress: linear-gradient(90deg, #f472b6, #a78bfa);
+    }
+
+    /* New Themes */
+    body.theme-emerald {
+        --primary: #10b981;
+        --secondary: #065f46;
+        --accent: #34d399;
+        --success: #84cc16;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #0ea5e9;
+        --muted: #a3a3a3;
+        --bg-start: #0a100a;
+        --bg-end: #161c16;
+        --card-bg: rgba(22, 28, 22, 0.9);
+        --text: #dcfce7;
+        --border: rgba(255,255,255,0.15);
+        --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        --glass: rgba(22, 28, 22, 0.8);
+        --gradient-main: linear-gradient(135deg, #10b981, #34d399);
+        --gradient-timer: linear-gradient(135deg, #065f46, #34d399);
+        --gradient-break: linear-gradient(135deg, #fcd34d, #f59e0b);
+        --gradient-todo-completed: linear-gradient(135deg, #84cc16, #d9f99d);
+        --gradient-todo-pending: linear-gradient(135deg, #34d399, #10b981);
+        --gradient-achievement-progress: linear-gradient(90deg, #10b981, #d9f99d);
+    }
+
+    body.theme-volcano {
+        --primary: #f97316;
+        --secondary: #634335;
+        --accent: #ef4444;
+        --success: #34d399;
+        --warning: #facc15;
+        --danger: #dc2626;
+        --info: #0ea5e9;
+        --muted: #94a3b8;
+        --bg-start: #2a2a2a;
+        --bg-end: #1a1a1a;
+        --card-bg: rgba(42, 42, 42, 0.9);
+        --text: #f1f5f9;
+        --border: rgba(255,255,255,0.1);
+        --shadow: 0 8px 32px rgba(0,0,0,0.5);
+        --glass: rgba(42, 42, 42, 0.8);
+        --gradient-main: linear-gradient(135deg, #f97316, #ef4444);
+        --gradient-timer: linear-gradient(135deg, #fb923c, #f87171);
+        --gradient-break: linear-gradient(135deg, #38bdf8, #67e8f9);
+        --gradient-todo-completed: linear-gradient(135deg, #34d399, #10b981);
+        --gradient-todo-pending: linear-gradient(135deg, #fca5a5, #f97316);
+        --gradient-achievement-progress: linear-gradient(90deg, #f97316, #fca5a5);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      background: var(--glass);
+      padding: 20px 28px;
+      border-radius: var(--radius);
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .brand { display: flex; align-items: center; gap: 16px; }
+    .logo {
+      width: 64px; height: 64px; border-radius: 16px;
+      background: var(--gradient-main);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 800; font-size: 24px;
+      box-shadow: 0 8px 24px rgba(99,102,241,0.3);
+      position: relative; overflow: hidden;
+    }
+    .logo::before {
+      content: ''; position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shine 3s infinite;
+    }
+    @keyframes shine { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    
+    .brand-text h1 { margin: 0; font-size: 1.8rem; font-weight: 800; background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .brand-text p { margin: 4px 0 0; color: var(--muted); font-weight: 500; }
+    
+    .header-controls { display: flex; gap: 12px; align-items: center; }
+    .btn {
+      padding: 12px 20px; border-radius: 12px; border: 0; font-weight: 600; cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1); position: relative; overflow: hidden;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+    .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
+    .btn-primary { background: var(--gradient-main); color: white; border: 0; }
+    .btn-danger { background: linear-gradient(135deg, var(--danger), #dc2626); color: white; border:0; }
+
+    /* Main Grid */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 480px 1fr;
+      gap: 24px;
+      flex: 1; /* Make the main grid expand to fill available space */
+    }
+    
+    .left-column, .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--glass);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.12); }
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .card-title { margin: 0; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .card-body { padding: 6px; }
+    
+    /* Profile Section */
+    .profile { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .avatar {
+      width: 72px; height: 72px; border-radius: 16px;
+      background: var(--gradient-main);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 800; font-size: 28px; position: relative;
+    }
+    .profile-info { flex: 1; }
+    .greeting { font-size: 1.4rem; font-weight: 800; margin: 0; }
+    .sub-greeting { color: var(--muted); margin: 4px 0 0; font-weight: 500; }
+    
+    /* Timer Section */
+    .timer-section {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 24px;
+      align-items: center;
+      margin: 24px 0;
+    }
+    .timer-circle {
+      width: 200px; height: 200px; position: relative;
+      background: var(--card-bg); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: inset 0 8px 16px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .timer-circle.glow { box-shadow: 0 0 20px rgba(99,102,241,0.4), inset 0 8px 16px rgba(0,0,0,0.1); animation: glow 2s ease-in-out infinite alternate; }
+    @keyframes glow { from { box-shadow: 0 0 20px rgba(99,102,241,0.4), inset 0 8px 16px rgba(0,0,0,0.1); } to { box-shadow: 0 0 30px rgba(99,102,241,0.8), inset 0 8px 16px rgba(0,0,0,0.1); } }
+    .timer-display {
+      font-family: 'JetBrains Mono', monospace; font-size: 2.2rem; font-weight: 800;
+      color: var(--primary); text-align: center;
+    }
+    .timer-controls { display: flex; flex-direction: column; gap: 16px; }
+    .control-group { display: flex; gap: 12px; align-items: center; }
+    
+    /* Input Styles */
+    input, select {
+      padding: 12px 16px; border: 2px solid var(--border); border-radius: 12px;
+      background: var(--card-bg); color: var(--text); font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+    
+    /* Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0; }
+    .stat-card {
+      padding: 20px; background: linear-gradient(135deg, var(--card-bg), var(--glass));
+      border-radius: 16px; text-align: center; border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+    .stat-value { font-size: 2rem; font-weight: 800; margin: 0; color: var(--primary); }
+    .stat-label { color: var(--muted); margin: 8px 0 0; font-weight: 600; font-size: 0.9rem; }
+    
+    /* Blocked Sites */
+    .blocked-sites {
+      display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0;
+      max-height: 120px; overflow-y: auto; padding: 8px;
+      background: rgba(0,0,0,0.02); border-radius: 12px;
+    }
+    .site-tag {
+      background: var(--gradient-main);
+      color: white; padding: 8px 12px; border-radius: 20px;
+      font-weight: 600; font-size: 0.9rem; display: flex; gap: 8px; align-items: center;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Progress Charts */
+    .progress-chart {
+      height: 120px; margin: 20px 0; display: flex; align-items: end;
+      gap: 8px; padding: 0 8px;
+    }
+    .progress-bar {
+      flex: 1; background: var(--gradient-main);
+      border-radius: 4px 4px 0 0; min-height: 8px; position: relative;
+      transition: all 0.3s ease;
+    }
+    .progress-bar:hover { transform: scaleY(1.05); }
+    
+    /* Achievements */
+    .achievements-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px; margin: 16px 0;
+    }
+    .achievement {
+      padding: 16px; background: var(--card-bg); border: 2px solid var(--border);
+      border-radius: 12px; display: flex; align-items: center; gap: 12px;
+      transition: all 0.3s ease; position:relative;
+    }
+    .achievement.unlocked { border-color: var(--success); background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05)); }
+    .achievement.locked { opacity: 0.6; }
+    .achievement-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+    }
+    .achievement.unlocked .achievement-icon { background: linear-gradient(135deg, var(--success), #059669); color: white; }
+    .achievement.locked .achievement-icon { background: var(--muted); color: white; }
+
+    .achievement-progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 6px;
+      background: var(--gradient-achievement-progress);
+      border-radius: 0 0 10px 10px;
+      transition: width 0.3s ease-in-out;
+    }
+    
+    /* Focus Insights */
+    .insights {
+      background: var(--gradient-main); color: white;
+      padding: 20px; border-radius: 16px; margin: 20px 0;
+    }
+    .insights h3 { margin: 0 0 12px; font-size: 1.1rem; }
+    .insight-item {
+      display: flex; align-items: center; gap: 12px; padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+    .insight-item:last-child { border-bottom: none; }
+    
+    /* Pomodoro Phases */
+    .phase-indicator { display: flex; gap: 8px; margin: 16px 0; justify-content: center; }
+    .phase { width: 12px; height: 12px; border-radius: 50%; background: var(--muted); transition: all 0.3s ease; }
+    .phase.active { background: var(--primary); transform: scale(1.2); }
+    .phase.completed { background: var(--success); }
+    
+    /* Notifications */
+    .notification {
+      position: fixed; top: 24px; right: 24px; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px;
+      box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px;
+      transform: translateX(100%); transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+      z-index: 1000; backdrop-filter: blur(20px);
+    }
+    .notification.show { transform: translateX(0); }
+    .notification-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; color: white;
+    }
+    .notification.success .notification-icon { background: var(--success); }
+    .notification.warning .notification-icon { background: var(--warning); }
+    .notification.info .notification-icon { background: var(--info); }
+    
+    /* Right Column Layout */
+    .right-column { display: flex; flex-direction: column; gap: 20px; }
+    
+    /* Focus Sessions Table */
+    .sessions-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    .sessions-table th, .sessions-table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    .sessions-table th { background: rgba(99,102,241,0.05); font-weight: 700; color: var(--muted); }
+    
+    /* Productivity Score */
+    .productivity-score {
+      text-align: center; padding: 24px;
+      background: var(--gradient-main);
+      color: white; border-radius: 16px; margin: 16px 0;
+    }
+    .score-value { font-size: 3rem; font-weight: 800; margin: 0; }
+    .score-label { margin: 8px 0 0; opacity: 0.9; font-weight: 600; }
+    
+    /* New Daily Goal Bar */
+    .daily-goal-progress {
+        width: 100%;
+        height: 12px;
+        background: rgba(0,0,0,0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 16px;
+    }
+    .daily-goal-bar {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, #4ee372, #21c463);
+        transition: width 0.5s ease;
+    }
+    body.dark .daily-goal-bar {
+        background: linear-gradient(90deg, #74e590, #50c173);
+    }
+
+    /* To-Do List Styles */
+    .todo-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .todo-input-group {
+      display: flex;
+      gap: 8px;
+    }
+    .todo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 8px;
+    }
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }
+    .todo-item:hover {
+      background: rgba(0,0,0,0.05);
+    }
+    .todo-item.completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+    }
+    .todo-item-text {
+      flex: 1;
+    }
+    .todo-checkbox {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .todo-item.completed .todo-checkbox {
+      background: var(--gradient-todo-completed);
+      border-color: var(--success);
+      color: white;
+    }
+    .todo-checkbox i {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .todo-item.completed .todo-checkbox i {
+      opacity: 1;
+    }
+    .todo-item button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .todo-item:hover button {
+      opacity: 1;
+    }
+    
+    /* Session History Calendar */
+    .history-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+        gap: 6px;
+        margin-top: 16px;
+    }
+    .history-day {
+        width: 100%;
+        padding-top: 100%; /* Make it square */
+        background: var(--card-bg);
+        border-radius: 6px;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        border: 1px solid var(--border);
+        box-shadow: 0 0 5px rgba(0,0,0,0.05);
+    }
+    .history-day:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        z-index: 10;
+    }
+    .history-day[data-minutes="0"] { background: var(--card-bg); opacity: 0.5; }
+    .history-day[data-minutes="1"] { background: linear-gradient(135deg, #a5b4fc, #8b5cf6); }
+    .history-day[data-minutes="2"] { background: linear-gradient(135deg, #8b5cf6, #c4b5fd); }
+    .history-day[data-minutes="3"] { background: linear-gradient(135deg, #c026d3, #db2777); }
+    .history-day[data-minutes="4"] { background: linear-gradient(135deg, #ec4899, #f97316); }
+    .history-day[data-minutes="5"] { background: linear-gradient(135deg, #f97316, #eab308); }
+
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .main-grid { grid-template-columns: 1fr; height: auto; }
+      .timer-section { grid-template-columns: 1fr; text-align: center; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      .header { flex-direction: column; gap: 16px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .achievements-grid { grid-template-columns: 1fr; }
+    }
+    .btn-with-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .theme-color-swatch {
+      width: 100%;
+      height: 16px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+  </style>
+  
+</head>
+<body class="theme-light">
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="brand">
+        <div class="logo">FG</div>
+        <div class="brand-text">
+          <h1>FocusGuard Pro</h1>
+          <p>Advanced productivity & time management system</p>
+        </div>
+      </div>
+      <div class="header-controls">
+        <button class="btn btn-outline btn-with-icon" id="exportBtn">
+          <i class="fas fa-download"></i> Export Data
+        </button>
+        <button class="btn btn-danger btn-with-icon" id="resetBtn">
+          <i class="fas fa-trash-alt"></i> Reset All
+        </button>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <!-- Left Column -->
+      <div class="left-column">
+        <!-- Profile Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-user-circle"></i>
+              Profile & Session Control
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="profile">
+              <div class="avatar" id="avatarInitial">S</div>
+              <div class="profile-info">
+                <div class="greeting" id="greeting">Hello, <span id="userNameDisplay">Sushant</span>! 👋</div>
+                <div class="sub-greeting" id="subGreeting">Ready to boost your productivity?</div>
+                <div style="margin-top:16px;display:flex;gap:8px">
+                  <input id="userName" type="text" placeholder="Enter your name" style="flex:1">
+                  <button id="saveName" class="btn btn-primary">Save</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pomodoro Phase Indicator -->
+            <div class="phase-indicator" id="phaseIndicator">
+              <div class="phase" title="Focus Session 1"></div>
+              <div class="phase" title="Focus Session 2"></div>
+              <div class="phase" title="Focus Session 3"></div>
+              <div class="phase" title="Focus Session 4"></div>
+              <div class="phase" title="Long Break"></div>
+            </div>
+
+            <!-- Timer Section -->
+            <div class="timer-section">
+              <div class="timer-circle" id="timerCircle">
+                <svg width="200" height="200" style="position:absolute">
+                  <circle cx="100" cy="100" r="85" fill="none" stroke="var(--border)" stroke-width="8"/>
+                  <circle id="progressCircle" cx="100" cy="100" r="85" fill="none" stroke="url(#timerGrad)" stroke-width="8" stroke-linecap="round" stroke-dasharray="534" stroke-dashoffset="534" transform="rotate(-90 100 100)"/>
+                  <defs>
+                    <linearGradient id="timerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#4e34e5"/>
+                      <stop offset="100%" stop-color="#c4b5fd"/>
+                    </linearGradient>
+                    <linearGradient id="breakGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#06b6d4"/>
+                      <stop offset="100%" stop-color="#38bdf8"/>
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div class="timer-display" id="timeDisplay">25:00</div>
+              </div>
+              
+              <div class="timer-controls">
+                <div class="control-group">
+                  <button id="startBtn" class="btn btn-primary btn-with-icon">
+                    <i class="fas fa-play"></i> Start Focus
+                  </button>
+                  <button id="pauseBtn" class="btn btn-outline btn-with-icon" disabled>
+                    <i class="fas fa-pause"></i> Pause
+                  </button>
+                </div>
+                
+                <div class="control-group">
+                  <label style="font-weight:600;color:var(--muted);min-width:80px">Duration:</label>
+                  <select id="preset" style="flex:1">
+                    <option value="25">25 min (Pomodoro)</option>
+                    <option value="50">50 min (Deep Work)</option>
+                    <option value="90">90 min (Flow State)</option>
+                    <option value="15">15 min (Quick Sprint)</option>
+                    <option value="5">5 min (Micro Focus)</option>
+                  </select>
+                </div>
+                
+                <div class="control-group">
+                  <label style="font-weight:600;color:var(--muted);min-width:80px">Custom:</label>
+                  <input id="customDuration" type="number" min="1" max="180" placeholder="Minutes" style="flex:1">
+                </div>
+                
+                <div style="margin-top:12px;padding:12px;background:rgba(99,102,241,0.05);border-radius:10px">
+                  <div id="statusText" style="font-weight:600;color:var(--primary)">Ready to focus</div>
+                  <div id="sessionInfo" style="margin-top:4px;font-size:0.9rem;color:var(--muted)">Click start to begin your focus session</div>
+                </div>
+              </div>
+            </div>
+
+             <!-- Daily Goal Progress -->
+            <div style="margin-top: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 700;">Daily Goal</div>
+                <div style="font-size: 0.9rem; color: var(--muted);" id="dailyGoalProgressText">0 / 120m</div>
+              </div>
+              <div class="daily-goal-progress">
+                <div class="daily-goal-bar" id="dailyGoalBar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- To-Do List Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-clipboard-list"></i>
+              To-Do List
+            </div>
+            <button class="btn btn-outline" id="clearCompletedBtn" style="font-size:0.8rem;padding:8px 12px">Clear Completed</button>
+          </div>
+          <div class="card-body todo-list-container">
+            <div class="todo-input-group">
+              <input id="todoInput" type="text" placeholder="Add a new task..." style="flex:1">
+              <button id="addTodoBtn" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            <div class="todo-list" id="todoList">
+              <div style="color:var(--muted);font-style:italic;text-align:center;padding:20px">No tasks yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Website Blocker Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-shield-alt"></i>
+              Website Blocker
+            </div>
+            <div style="font-size:0.9rem;color:var(--muted)">
+              <span id="blockedCount">0</span> sites blocked
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;gap:8px;margin-bottom:16px">
+              <input id="siteInput" type="text" placeholder="e.g. facebook.com, youtube.com" style="flex:1">
+              <button id="addSiteBtn" class="btn btn-primary btn-with-icon">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+            
+            <div class="blocked-sites" id="blockedSites">
+              <div style="color:var(--muted);font-style:italic">No blocked sites yet. Add some to improve focus!</div>
+            </div>
+            
+            <!-- Quick Add Suggestions -->
+            <div style="margin-top:16px">
+              <div style="font-weight:600;margin-bottom:8px;color:var(--muted)">Quick Add:</div>
+              <div style="display:flex;flex-wrap:gap;gap:8px">
+                <button class="btn btn-outline" onclick="quickAddSite('facebook.com')" style="font-size:0.8rem;padding:6px 12px">Facebook</button>
+                <button class="btn btn-outline" onclick="quickAddSite('youtube.com')" style="font-size:0.8rem;padding:6px 12px">YouTube</button>
+                <button class="btn btn-outline" onclick="quickAddSite('twitter.com')" style="font-size:0.8rem;padding:6px 12px">Twitter</button>
+                <button class="btn btn-outline" onclick="quickAddSite('instagram.com')" style="font-size:0.8rem;padding:6px 12px">Instagram</button>
+                <button class="btn btn-outline" onclick="quickAddSite('reddit.com')" style="font-size:0.8rem;padding:6px 12px">Reddit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-medal"></i>
+              Achievements
+            </div>
+            <div style="font-size:0.9rem;color:var(--muted)">
+              <span id="unlockedCount">0</span> of 12 unlocked
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="achievements-grid" id="achievementsGrid"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-column">
+        <!-- Productivity Score -->
+        <div class="card">
+          <div class="productivity-score">
+            <div class="score-value" id="productivityScore">85</div>
+            <div class="score-label">Productivity Score</div>
+            <div style="margin-top:12px;font-size:0.9rem;opacity:0.9" id="scoreDescription">
+              Great focus! Keep up the momentum.
+            </div>
+          </div>
+        </div>
+        
+        <!-- Stats Overview -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-chart-line"></i>
+              Focus Statistics
+            </div>
+            <div style="font-size:0.9rem;color:var(--muted)">Today's Progress</div>
+          </div>
+          <div class="card-body">
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-value" id="todayFocus">0m</div>
+                <div class="stat-label">Focused Today</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="sessionsCompleted">0</div>
+                <div class="stat-label">Sessions Done</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="currentStreak">0</div>
+                <div class="stat-label">Day Streak</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="averageSession">0m</div>
+                <div class="stat-label">Avg Session</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="weeklyGoal">0%</div>
+                <div class="stat-label">Weekly Goal</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value" id="focusRating">0.0</div>
+                <div class="stat-label">Focus Rating</div>
+              </div>
+            </div>
+
+            <!-- Weekly Progress Chart -->
+            <div style="margin-top:24px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+                <div style="font-weight:700">Weekly Progress</div>
+                <div style="font-size:0.9rem;color:var(--muted)">Last 7 days</div>
+              </div>
+              <div class="progress-chart" id="weeklyChart"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Settings Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    <i class="fas fa-palette"></i>
+                    Theme Settings
+                </div>
+            </div>
+            <div class="card-body">
+                <div style="display:grid; gap:16px">
+                    <div style="font-weight:600;color:var(--muted)">Choose a theme:</div>
+                    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:12px;">
+                        <button class="btn btn-outline" id="theme-light">
+                            <div class="theme-color-swatch" style="background:linear-gradient(90deg, #f8fafc, #e2e8f0);"></div>
+                            Light Mode
+                        </button>
+                        <button class="btn btn-outline" id="theme-dark">
+                            <div class="theme-color-swatch" style="background:linear-gradient(90deg, #111827, #1f2937);"></div>
+                            Dark Mode
+                        </button>
+                        <button class="btn btn-outline" id="theme-cosmic">
+                            <div class="theme-color-swatch" style="background:linear-gradient(90deg, #0f0f1d, #251a3d);"></div>
+                            Cosmic
+                        </button>
+                        <button class="btn btn-outline" id="theme-sunset">
+                            <div class="theme-color-swatch" style="background:linear-gradient(90deg, #fff7ed, #fef3c7);"></div>
+                            Sunset
+                        </button>
+                        <button class="btn btn-outline" id="theme-ocean">
+                            <div class="theme-color-swatch" style="background:linear-gradient(90deg, #0f172a, #0c4a6e);"></div>
+                            Ocean
+                        </button>
+                        <button class="btn btn-outline" id="theme-forest">
+                            <div class="theme-color-swatch" style="background:linear-gradient(90deg, #1c2620, #343f35);"></div>
+                            Forest
+                        </button>
+                        <button class="btn btn-outline" id="theme-fire">
+                            <div class="theme-color-swatch" style="background:linear-gradient(90deg, #230a0d, #3d1a1a);"></div>
+                            Fire
+                        </button>
+                        <button class="btn btn-outline" id="theme-emerald">
+                            <div class="theme-color-swatch" style="background:linear-gradient(90deg, #0a100a, #161c16);"></div>
+                            Emerald
+                        </button>
+                        <button class="btn btn-outline" id="theme-volcano">
+                            <div class="theme-color-swatch" style="background:linear-gradient(90deg, #2a2a2a, #1a1a1a);"></div>
+                            Volcano
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Focus Insights -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-lightbulb"></i>
+              Focus Insights
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="insights">
+              <h3><i class="fas fa-brain"></i> Smart Recommendations</h3>
+              <div id="insightsList">
+                <div class="insight-item">
+                  <i class="fas fa-clock"></i>
+                  <div style="flex:1;">
+                    <div style="font-weight:600">Peak Focus Time</div>
+                    <div style="opacity:0.9;font-size:0.9rem">You focus best between 9-11 AM</div>
+                  </div>
+                </div>
+                <div class="insight-item">
+                  <i class="fas fa-target"></i>
+                  <div style="flex:1;">
+                    <div style="font-weight:600">Optimal Session Length</div>
+                    <div style="opacity:0.9;font-size:0.9rem">25-minute sessions work best for you</div>
+                  </div>
+                </div>
+                <div class="insight-item">
+                  <i class="fas fa-trophy"></i>
+                  <div style="flex:1;">
+                    <div style="font-weight:600">Consistency Boost</div>
+                    <div style="opacity:0.9;font-size:0.9rem">Try focusing at the same time daily</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings & Advanced -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <i class="fas fa-cog"></i>
+              Advanced Settings
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display:grid;gap:16px">
+              <div>
+                <label style="display:block;font-weight:600;margin-bottom:8px;color:var(--muted)">
+                  <i class="fas fa-volume-up"></i> Notifications
+                </label>
+                <select id="notificationSettings" style="width:100%">
+                  <option value="all">All notifications enabled</option>
+                  <option value="important">Important only</option>
+                  <option value="silent">Silent mode</option>
+                </select>
+              </div>
+              
+              <div>
+                <label style="display:block;font-weight:600;margin-bottom:8px;color:var(--muted)">
+                  <i class="fas fa-bullseye"></i> Daily Goal (minutes)
+                </label>
+                <input id="dailyGoal" type="number" min="30" max="480" value="120" style="width:100%">
+              </div>
+              
+              <div>
+                <label style="display:block;font-weight:600;margin-bottom:8px;color:var(--muted)">
+                  <i class="fas fa-coffee"></i> Break Duration (minutes)
+                </label>
+                <select id="breakDuration" style="width:100%">
+                  <option value="5">5 minutes (Short break)</option>
+                  <option value="15">15 minutes (Long break)</option>
+                  <option value="30">30 minutes (Extended break)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label style="display:block;font-weight:600;margin-bottom:8px;color:var(--muted)">
+                  <i class="fas fa-shield-alt"></i> Blocking Strictness
+                </label>
+                <select id="blockingMode" style="width:100%">
+                  <option value="soft">Soft block (reminders only)</option>
+                  <option value="medium">Medium block (3-second delay)</option>
+                  <option value="hard">Hard block (complete restriction)</option>
+                </select>
+              </div>
+              
+              <div>
+                <label style="display:block;font-weight:600;margin-bottom:8px;color:var(--muted)">
+                  <i class="fas fa-chart-pie"></i> Analytics
+                </label>
+                <div style="display:flex;gap:8px">
+                  <button id="exportDataBtn" class="btn btn-outline" style="flex:1">
+                    <i class="fas fa-download"></i> Export Data
+                  </button>
+                  <button id="viewReportsBtn" class="btn btn-primary" style="flex:1">
+                    <i class="fas fa-chart-bar"></i> Reports
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top:32px;text-align:center;color:var(--muted);padding:20px">
+      <div style="margin-bottom:8px">
+        <strong>FocusGuard Pro</strong> - Advanced Productivity Dashboard
+      </div>
+      <div style="font-size:0.9rem">
+        Demo version with enhanced UI/UX. Full system integration available in production build.
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification System -->
+  <div class="notification" id="notification">
+    <div class="notification-icon" id="notificationIcon">
+      <i class="fas fa-check"></i>
+    </div>
+    <div id="notificationText">Notification text</div>
+  </d>
+
+  <!-- Audio Elements -->
+  <audio id="startSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="completeSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="warningSound" preload="auto">
+    <source src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // Enhanced FocusGuard Pro JavaScript
+    (function() {
+      'use strict';
+      
+      // --- Connection to Extension ---
+      const EXTENSION_ID = 'hdlbolojdppbhgmcfdgiopmfnohncphm'; 
+
+      function sendToExtension(action, data) {
+          if (typeof chrome !== 'undefined' && chrome.runtime) {
+              chrome.runtime.sendMessage(EXTENSION_ID, {
+                  action: action,
+                  data: data
+              }, function(response) {
+                  if (chrome.runtime.lastError) {
+                      console.error("Error sending message:", chrome.runtime.lastError.message);
+                  } else if (response && response.status === "success") {
+                      console.log("Extension responded:", response.message);
+                  }
+              });
+          } else {
+              console.warn("Could not find chrome.runtime.sendMessage. This is normal if not running with the extension.");
+          }
+      }
+      // --- End Connection to Extension ---
+
+      // Storage keys
+      const STORAGE_KEYS = {
+        USER_DATA: 'fg_pro_user_data',
+        SESSIONS: 'fg_pro_sessions',
+        BLOCKED_SITES: 'fg_pro_blocked_sites',
+        SETTINGS: 'fg_pro_settings',
+        ACHIEVEMENTS: 'fg_pro_achievements',
+        ACTIVE_SESSION: 'fg_pro_active_session',
+        TODO_LIST: 'fg_pro_todo_list'
+      };
+
+      // Default settings
+      const DEFAULT_SETTINGS = {
+        theme: 'light',
+        notifications: 'all',
+        dailyGoal: 120,
+        breakDuration: 15,
+        blockingMode: 'medium',
+        soundEnabled: true
+      };
+
+      // Achievements definitions
+      const ACHIEVEMENT_DEFS = [
+        { id: 'first_session', name: 'Getting Started', desc: 'Complete your first focus session', icon: '🚀', points: 10, goal: 1, type: 'sessions' },
+        { id: 'early_bird', name: 'Early Bird', desc: 'Start a session before 9 AM', icon: '🌅', points: 15, goal: 1, type: 'custom' },
+        { id: 'night_owl', name: 'Night Owl', desc: 'Focus session after 8 PM', icon: '🦉', points: 15, goal: 1, type: 'custom' },
+        { id: 'marathon', name: 'Marathon', desc: 'Complete a 90+ minute session', icon: '🏃', points: 25, goal: 1, type: 'marathon' },
+        { id: 'consistency', name: 'Consistency', desc: '7-day focus streak', icon: '🔥', points: 30, goal: 7, type: 'streak' },
+        { id: 'focus_master', name: 'Focus Master', desc: 'Complete 50 sessions', icon: '🎯', points: 50, goal: 50, type: 'sessions' },
+        { id: 'distraction_free', name: 'Distraction Free', desc: 'Block 20+ websites', icon: '🛡️', points: 20, goal: 20, type: 'sites' },
+        { id: 'goal_crusher', name: 'Goal Crusher', desc: 'Meet daily goal 10 days', icon: '💪', points: 35, goal: 10, type: 'goal_days' },
+        { id: 'zen_master', name: 'Zen Master', desc: '100 hours of total focus', icon: '🧘', points: 75, goal: 6000, type: 'minutes' },
+        { id: 'productivity_guru', name: 'Productivity Guru', desc: 'Maintain 90+ productivity score for a week', icon: '🏆', points: 100, goal: 1, type: 'custom' },
+        { id: 'social_detox', name: 'Social Media Detox', desc: 'Block all major social platforms', icon: '📵', points: 25, goal: 5, type: 'custom' },
+        { id: 'deep_work', name: 'Deep Work Champion', desc: 'Complete 10 sessions of 60+ minutes', icon: '⚡', points: 40, goal: 10, type: 'deep_sessions' }
+      ];
+
+      // State management
+      let state = {
+        user: { name: 'User', avatar: 'U' },
+        currentSession: null,
+        sessions: [],
+        blockedSites: [],
+        settings: { ...DEFAULT_SETTINGS },
+        achievements: [],
+        timer: null,
+        pomodoroPhase: 0,
+        productivity: { score: 0, streak: 0, weeklyGoal: 0 },
+        todoList: []
+      };
+
+      // DOM elements
+      const elements = {
+        themeToggle: document.getElementById('themeToggle'),
+        resetBtn: document.getElementById('resetBtn'),
+        exportBtn: document.getElementById('exportBtn'),
+        
+        userName: document.getElementById('userName'),
+        userNameDisplay: document.getElementById('userNameDisplay'),
+        avatarInitial: document.getElementById('avatarInitial'),
+        saveName: document.getElementById('saveName'),
+        greeting: document.getElementById('greeting'),
+        subGreeting: document.getElementById('subGreeting'),
+        
+        timeDisplay: document.getElementById('timeDisplay'),
+        progressCircle: document.getElementById('progressCircle'),
+        timerCircle: document.getElementById('timerCircle'),
+        startBtn: document.getElementById('startBtn'),
+        pauseBtn: document.getElementById('pauseBtn'),
+        preset: document.getElementById('preset'),
+        customDuration: document.getElementById('customDuration'),
+        statusText: document.getElementById('statusText'),
+        sessionInfo: document.getElementById('sessionInfo'),
+        phaseIndicator: document.getElementById('phaseIndicator'),
+        
+        siteInput: document.getElementById('siteInput'),
+        addSiteBtn: document.getElementById('addSiteBtn'),
+        blockedSites: document.getElementById('blockedSites'),
+        blockedCount: document.getElementById('blockedCount'),
+        
+        productivityScore: document.getElementById('productivityScore'),
+        scoreDescription: document.getElementById('scoreDescription'),
+        todayFocus: document.getElementById('todayFocus'),
+        sessionsCompleted: document.getElementById('sessionsCompleted'),
+        currentStreak: document.getElementById('currentStreak'),
+        averageSession: document.getElementById('averageSession'),
+        weeklyGoal: document.getElementById('weeklyGoal'),
+        focusRating: document.getElementById('focusRating'),
+        weeklyChart: document.getElementById('weeklyChart'),
+        
+        achievementsGrid: document.getElementById('achievementsGrid'),
+        unlockedCount: document.getElementById('unlockedCount'),
+        
+        notificationSettings: document.getElementById('notificationSettings'),
+        dailyGoal: document.getElementById('dailyGoal'),
+        breakDuration: document.getElementById('breakDuration'),
+        blockingMode: document.getElementById('blockingMode'),
+        exportDataBtn: document.getElementById('exportDataBtn'),
+        viewReportsBtn: document.getElementById('viewReportsBtn'),
+        themeLightBtn: document.getElementById('theme-light'),
+        themeDarkBtn: document.getElementById('theme-dark'),
+        themeCosmicBtn: document.getElementById('theme-cosmic'),
+        themeSunsetBtn: document.getElementById('theme-sunset'),
+        themeOceanBtn: document.getElementById('theme-ocean'),
+        themeForestBtn: document.getElementById('theme-forest'),
+        themeFireBtn: document.getElementById('theme-fire'),
+        themeEmeraldBtn: document.getElementById('theme-emerald'),
+        themeVolcanoBtn: document.getElementById('theme-volcano'),
+        
+        dailyGoalBar: document.getElementById('dailyGoalBar'),
+        dailyGoalProgressText: document.getElementById('dailyGoalProgressText'),
+        
+        notification: document.getElementById('notification'),
+        notificationIcon: document.getElementById('notificationIcon'),
+        notificationText: document.getElementById('notificationText'),
+        
+        startSound: document.getElementById('startSound'),
+        completeSound: document.getElementById('completeSound'),
+        warningSound: document.getElementById('warningSound'),
+        
+        todoInput: document.getElementById('todoInput'),
+        addTodoBtn: document.getElementById('addTodoBtn'),
+        todoList: document.getElementById('todoList'),
+        clearCompletedBtn: document.getElementById('clearCompletedBtn')
+      };
+
+      // Utility functions
+      const utils = {
+        formatTime(seconds) {
+          const mins = Math.floor(seconds / 60);
+          const secs = seconds % 60;
+          return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        },
+
+        formatDate(date) {
+          return new Date(date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        },
+
+        getToday() {
+          return new Date().toISOString().split('T')[0];
+        },
+
+        playSound(audioElement) {
+          if (state.settings.soundEnabled && audioElement) {
+            audioElement.currentTime = 0;
+            audioElement.play().catch(e => console.log('Audio play failed:', e));
+          }
+        },
+
+        saveToStorage(key, data) {
+          try {
+            localStorage.setItem(key, JSON.stringify(data));
+          } catch (e) {
+            console.error('Failed to save to storage:', e);
+          }
+        },
+
+        loadFromStorage(key, defaultValue = null) {
+          try {
+            const data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : defaultValue;
+          } catch (e) {
+            console.error('Failed to load from storage:', e);
+            return defaultValue;
+          }
+        },
+
+        showNotification(message, type = 'info', duration = 4000) {
+          const iconMap = {
+            success: 'fas fa-check',
+            warning: 'fas fa-exclamation-triangle',
+            error: 'fas fa-times',
+            info: 'fas fa-info-circle'
+          };
+
+          elements.notificationIcon.innerHTML = `<i class="${iconMap[type] || iconMap.info}"></i>`;
+          elements.notificationText.textContent = message;
+          elements.notification.className = `notification ${type} show`;
+
+          setTimeout(() => {
+            elements.notification.classList.remove('show');
+          }, duration);
+        }
+      };
+
+      // Session management
+      const sessionManager = {
+        start(duration) {
+          if (state.currentSession) return false;
+
+          const session = {
+            id: Date.now(),
+            startTime: new Date(),
+            duration: duration * 60,
+            remaining: duration * 60,
+            type: duration === 25 ? 'pomodoro' : duration >= 60 ? 'deep_work' : 'sprint',
+            status: 'active'
+          };
+
+          state.currentSession = session;
+          this.updateUI();
+          this.startTimer();
+          
+          utils.playSound(elements.startSound);
+          utils.showNotification(`Focus session started! ${duration} minutes of deep work ahead.`, 'success');
+          
+          sendToExtension("startFocusSession", { blockedSites: state.blockedSites });
+          
+          return true;
+        },
+
+        pause() {
+          if (!state.currentSession || state.currentSession.status !== 'active') return;
+          
+          state.currentSession.status = 'paused';
+          this.stopTimer();
+          this.updateUI();
+          
+          utils.showNotification('Session paused. Take a moment to breathe.', 'warning');
+          
+          sendToExtension("stopFocusSession");
+        },
+
+        resume() {
+          if (!state.currentSession || state.currentSession.status !== 'paused') return;
+          
+          state.currentSession.status = 'active';
+          this.startTimer();
+          this.updateUI();
+          
+          utils.showNotification('Session resumed. Back to focused work!', 'info');
+          
+          sendToExtension("startFocusSession", { blockedSites: state.blockedSites });
+        },
+
+        complete() {
+          if (!state.currentSession) return;
+
+          const session = state.currentSession;
+          const completedSession = {
+            ...session,
+            endTime: new Date(),
+            actualDuration: session.duration - session.remaining,
+            status: 'completed',
+            productivity: this.calculateProductivity(session)
+          };
+
+          state.sessions.push(completedSession);
+          state.currentSession = null;
+          
+          this.stopTimer();
+          this.updateUI();
+          achievementSystem.checkAchievements();
+          
+          utils.playSound(elements.completeSound);
+          utils.showNotification('Focus session completed! Well done!', 'success');
+          
+          utils.saveToStorage(STORAGE_KEYS.SESSIONS, state.sessions);
+          
+          sendToExtension("stopFocusSession");
+
+          this.startBreak();
+        },
+        
+        startBreak() {
+          const breakDuration = parseInt(elements.breakDuration.value) || 5;
+          const breakSession = {
+            id: Date.now(),
+            startTime: new Date(),
+            duration: breakDuration * 60,
+            remaining: breakDuration * 60,
+            type: 'break',
+            status: 'active'
+          };
+          state.currentSession = breakSession;
+          this.updateUI();
+          this.startTimer();
+          utils.showNotification(`Break time! Relax for ${breakDuration} minutes.`, 'info');
+        },
+
+        cancel() {
+          if (!state.currentSession) return;
+
+          const session = state.currentSession;
+          const cancelledSession = {
+            ...session,
+            endTime: new Date(),
+            actualDuration: session.duration - session.remaining,
+            status: 'cancelled'
+          };
+
+          state.sessions.push(cancelledSession);
+          state.currentSession = null;
+          
+          this.stopTimer();
+          this.updateUI();
+          
+          utils.showNotification('Session cancelled.', 'warning');
+          utils.saveToStorage(STORAGE_KEYS.SESSIONS, state.sessions);
+          
+          sendToExtension("stopFocusSession");
+        },
+
+        startTimer() {
+          this.stopTimer();
+          state.timer = setInterval(() => {
+            if (state.currentSession && state.currentSession.remaining > 0) {
+              state.currentSession.remaining--;
+              this.updateProgress();
+              
+              if (state.currentSession.remaining === 0) {
+                if (state.currentSession.type === 'break') {
+                    this.endBreak();
+                } else {
+                    this.complete();
+                }
+              }
+            }
+          }, 1000);
+        },
+        
+        endBreak() {
+            state.sessions.push({ ...state.currentSession, status: 'completed' });
+            state.currentSession = null;
+            this.stopTimer();
+            this.updateUI();
+            utils.showNotification('Break is over! Time to focus again.', 'success');
+            utils.saveToStorage(STORAGE_KEYS.SESSIONS, state.sessions);
+        },
+
+        stopTimer() {
+          if (state.timer) {
+            clearInterval(state.timer);
+            state.timer = null;
+          }
+        },
+
+        updateProgress() {
+          if (!state.currentSession) return;
+
+          const progress = 1 - (state.currentSession.remaining / state.currentSession.duration);
+          const circumference = 2 * Math.PI * 85;
+          const offset = circumference * (1 - progress);
+
+          elements.progressCircle.style.strokeDashoffset = offset;
+          elements.timeDisplay.textContent = utils.formatTime(state.currentSession.remaining);
+          
+          const minutesLeft = Math.floor(state.currentSession.remaining / 60);
+          elements.sessionInfo.textContent = state.currentSession.type === 'break' 
+            ? `Break time: ${minutesLeft} minutes left` 
+            : `${minutesLeft} minutes remaining in this session`;
+        },
+
+        updateUI() {
+          const isActive = state.currentSession && state.currentSession.status === 'active';
+          const isPaused = state.currentSession && state.currentSession.status === 'paused';
+          const isBreak = state.currentSession && state.currentSession.type === 'break';
+
+          elements.startBtn.disabled = isActive || isPaused;
+          elements.pauseBtn.disabled = !isActive && !isPaused;
+          elements.startBtn.innerHTML = isBreak ? '<i class="fas fa-stop"></i> End Break' : '<i class="fas fa-play"></i> Start Focus';
+
+          if (isActive) {
+            elements.statusText.textContent = isBreak ? 'Break is active' : 'Focus mode active';
+            elements.timerCircle.classList.add('glow');
+            elements.pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+            elements.progressCircle.style.stroke = isBreak ? 'url(#breakGrad)' : 'url(#timerGrad)';
+          } else if (isPaused) {
+            elements.statusText.textContent = 'Session paused';
+            elements.timerCircle.classList.remove('glow');
+            elements.pauseBtn.innerHTML = '<i class="fas fa-play"></i> Resume';
+          } else {
+            elements.statusText.textContent = 'Ready to focus';
+            elements.timerCircle.classList.remove('glow');
+            const duration = parseInt(elements.customDuration.value) || parseInt(elements.preset.value) || 25;
+            elements.timeDisplay.textContent = utils.formatTime(duration * 60);
+            elements.sessionInfo.textContent = 'Click start to begin your focus session';
+            elements.pauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+            elements.progressCircle.style.stroke = 'url(#timerGrad)';
+          }
+        },
+
+        calculateProductivity(session) {
+          const completionRate = (session.duration - session.remaining) / session.duration;
+          const durationBonus = Math.min(session.duration / (60 * 60), 1);
+          return Math.round((completionRate * 0.7 + durationBonus * 0.3) * 100);
+        }
+      };
+
+      // Statistics and analytics
+      const analytics = {
+        updateStats() {
+          const today = utils.getToday();
+          const completedSessions = state.sessions.filter(s => s.status === 'completed' && s.type !== 'break');
+          
+          const todayMinutes = completedSessions
+            .filter(s => s.startTime.toISOString().split('T')[0] === today)
+            .reduce((total, s) => total + Math.floor(s.actualDuration / 60), 0);
+          
+          const avgMinutes = completedSessions.length > 0 
+            ? Math.round(completedSessions.reduce((sum, s) => sum + s.actualDuration, 0) / completedSessions.length / 60)
+            : 0;
+          
+          const streak = this.calculateStreak();
+          
+          const weeklyMinutes = this.getWeeklyMinutes();
+          const weeklyProgress = Math.round((weeklyMinutes / (state.settings.dailyGoal * 7)) * 100);
+          
+          const focusRating = completedSessions.length > 0
+            ? (completedSessions.reduce((sum, s) => sum + (s.productivity || 70), 0) / completedSessions.length / 100).toFixed(1)
+            : '0.0';
+          
+          const productivityScore = this.calculateProductivityScore();
+          
+          elements.todayFocus.textContent = `${todayMinutes}m`;
+          elements.sessionsCompleted.textContent = completedSessions.length;
+          elements.currentStreak.textContent = streak;
+          elements.averageSession.textContent = `${avgMinutes}m`;
+          elements.weeklyGoal.textContent = `${Math.min(weeklyProgress, 100)}%`;
+          elements.focusRating.textContent = focusRating;
+          elements.productivityScore.textContent = productivityScore;
+          
+          const progressPercentage = Math.min((todayMinutes / state.settings.dailyGoal) * 100, 100);
+          elements.dailyGoalBar.style.width = `${progressPercentage}%`;
+          elements.dailyGoalProgressText.textContent = `${todayMinutes} / ${state.settings.dailyGoal}m`;
+
+          const descriptions = [
+            { min: 90, text: "Outstanding focus! You're in the zone!" },
+            { min: 80, text: "Great focus! Keep up the momentum." },
+            { min: 70, text: "Good progress. Stay consistent!" },
+            { min: 60, text: "Decent effort. Room for improvement." },
+            { min: 0, text: "Let's build better focus habits together." }
+          ];
+          
+          const description = descriptions.find(d => productivityScore >= d.min);
+          elements.scoreDescription.textContent = description.text;
+
+          this.renderWeeklyChart();
+        },
+
+        calculateStreak() {
+          const sessions = state.sessions.filter(s => s.status === 'completed' && s.type !== 'break');
+          if (sessions.length === 0) return 0;
+
+          sessions.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+          
+          let streak = 0;
+          let currentDate = new Date();
+          currentDate.setHours(0, 0, 0, 0);
+
+          while (true) {
+            const dateStr = currentDate.toISOString().split('T')[0];
+            const hasSession = sessions.some(s => 
+              s.startTime.toISOString().split('T')[0] === dateStr
+            );
+
+            if (hasSession) {
+              streak++;
+              currentDate.setDate(currentDate.getDate() - 1);
+            } else {
+              break;
+            }
+          }
+
+          return streak;
+        },
+
+        getWeeklyMinutes() {
+          const weekStart = new Date();
+          weekStart.setDate(weekStart.getDate() - 6);
+          weekStart.setHours(0, 0, 0, 0);
+
+          return state.sessions
+            .filter(s => s.status === 'completed' && s.type !== 'break' && new Date(s.startTime) >= weekStart)
+            .reduce((total, s) => total + Math.floor(s.actualDuration / 60), 0);
+        },
+
+        calculateProductivityScore() {
+          const factors = {
+            consistency: Math.min(this.calculateStreak() * 10, 30),
+            completion: Math.min(state.sessions.filter(s => s.status === 'completed' && s.type !== 'break').length * 2, 40),
+            focus: this.getAverageFocusTime(),
+            recent: this.getRecentPerformance()
+          };
+
+          return Math.min(Math.round(
+            factors.consistency + factors.completion + factors.focus + factors.recent
+          ), 100);
+        },
+
+        getAverageFocusTime() {
+          const completed = state.sessions.filter(s => s.status === 'completed' && s.type !== 'break');
+          if (completed.length === 0) return 0;
+
+          const avgMinutes = completed.reduce((sum, s) => sum + s.actualDuration, 0) / completed.length / 60;
+          return Math.min(avgMinutes / 2, 20);
+        },
+
+        getRecentPerformance() {
+          const recent = state.sessions.slice(-10).filter(s => s.status === 'completed' && s.type !== 'break');
+          if (recent.length === 0) return 0;
+
+          const avgProductivity = recent.reduce((sum, s) => sum + (s.productivity || 70), 0) / recent.length;
+          return Math.round(avgProductivity * 0.1);
+        },
+
+        renderWeeklyChart() {
+          elements.weeklyChart.innerHTML = '';
+          
+          const days = [];
+          for (let i = 6; i >= 0; i--) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            days.push({
+              date: date.toISOString().split('T')[0],
+              day: date.toLocaleDateString('en-US', { weekday: 'short' })
+            });
+          }
+
+          const maxMinutes = Math.max(...days.map(day => {
+            return state.sessions
+              .filter(s => s.status === 'completed' && s.type !== 'break' && s.startTime.toISOString().split('T')[0] === day.date)
+              .reduce((sum, s) => sum + Math.floor(s.actualDuration / 60), 0);
+          }), 1);
+
+          days.forEach(day => {
+            const minutes = state.sessions
+              .filter(s => s.status === 'completed' && s.type !== 'break' && s.startTime.toISOString().split('T')[0] === day.date)
+              .reduce((sum, s) => sum + Math.floor(s.actualDuration / 60), 0);
+
+            const height = Math.max(8, (minutes / maxMinutes) * 100);
+            
+            const bar = document.createElement('div');
+            bar.className = 'progress-bar';
+            bar.style.height = `${height}%`;
+            bar.title = `${day.day}: ${minutes} minutes focused`;
+            
+            const label = document.createElement('div');
+            label.style.cssText = 'position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:0.8rem;color:var(--muted)';
+            label.textContent = day.day;
+            bar.style.position = 'relative';
+            bar.appendChild(label);
+            
+            elements.weeklyChart.appendChild(bar);
+          });
+        }
+      };
+
+      // Achievement system
+      const achievementSystem = {
+        checkAchievements() {
+          const newAchievements = [];
+
+          ACHIEVEMENT_DEFS.forEach(achievement => {
+            if (!state.achievements.includes(achievement.id) && this.isUnlocked(achievement.id)) {
+              newAchievements.push(achievement.id);
+            }
+          });
+
+          if (newAchievements.length > 0) {
+            state.achievements.push(...newAchievements);
+            utils.saveToStorage(STORAGE_KEYS.ACHIEVEMENTS, state.achievements);
+            
+            newAchievements.forEach(id => {
+              const achievement = ACHIEVEMENT_DEFS.find(a => a.id === id);
+              if (achievement) {
+                utils.showNotification(`🏆 Achievement Unlocked: ${achievement.name}!`, 'success', 5000);
+              }
+            });
+            
+            this.renderAchievements();
+          }
+        },
+
+        isUnlocked(achievementId) {
+          const completedSessions = state.sessions.filter(s => s.status === 'completed' && s.type !== 'break');
+          const totalMinutes = completedSessions.reduce((sum, s) => sum + Math.floor(s.actualDuration / 60), 0);
+
+          switch (achievementId) {
+            case 'first_session': return completedSessions.length >= 1;
+            case 'early_bird': return completedSessions.some(s => new Date(s.startTime).getHours() < 9);
+            case 'night_owl': return completedSessions.some(s => new Date(s.startTime).getHours() >= 20);
+            case 'marathon': return completedSessions.some(s => s.actualDuration >= 90 * 60);
+            case 'consistency': return analytics.calculateStreak() >= 7;
+            case 'focus_master': return completedSessions.length >= 50;
+            case 'distraction_free': return state.blockedSites.length >= 20;
+            case 'goal_crusher':
+              const dailyGoalDays = this.countDailyGoalDays();
+              return dailyGoalDays >= 10;
+            case 'zen_master': return totalMinutes >= 6000;
+            case 'productivity_guru': return this.hasHighProductivityWeek();
+            case 'social_detox':
+              const socialSites = ['facebook.com', 'twitter.com', 'instagram.com', 'tiktok.com', 'snapchat.com'];
+              const blockedSocialCount = state.blockedSites.filter(site => socialSites.includes(site)).length;
+              return blockedSocialCount >= 5;
+            case 'deep_work': return completedSessions.filter(s => s.actualDuration >= 60 * 60).length >= 10;
+            default: return false;
+          }
+        },
+
+        countDailyGoalDays() {
+          const sessionsByDate = {};
+          state.sessions.filter(s => s.status === 'completed' && s.type !== 'break').forEach(session => {
+            const date = session.startTime.toISOString().split('T')[0];
+            sessionsByDate[date] = (sessionsByDate[date] || 0) + Math.floor(session.actualDuration / 60);
+          });
+          return Object.values(sessionsByDate).filter(minutes => minutes >= state.settings.dailyGoal).length;
+        },
+
+        hasHighProductivityWeek() {
+          const recent = state.sessions.slice(-50).filter(s => s.status === 'completed' && s.type !== 'break');
+          if (recent.length < 7) return false;
+          const avgProductivity = recent.reduce((sum, s) => sum + (s.productivity || 70), 0) / recent.length;
+          return avgProductivity >= 90;
+        },
+
+        getAchievementProgress(achievement) {
+          const completedSessions = state.sessions.filter(s => s.status === 'completed' && s.type !== 'break');
+          const totalMinutes = completedSessions.reduce((sum, s) => sum + Math.floor(s.actualDuration / 60), 0);
+          let progress = 0;
+
+          switch (achievement.id) {
+              case 'first_session': progress = completedSessions.length / achievement.goal; break;
+              case 'early_bird': progress = completedSessions.some(s => new Date(s.startTime).getHours() < 9) ? 1 : 0; break;
+              case 'night_owl': progress = completedSessions.some(s => new Date(s.startTime).getHours() >= 20) ? 1 : 0; break;
+              case 'marathon': progress = completedSessions.some(s => s.actualDuration >= 90 * 60) ? 1 : 0; break;
+              case 'consistency': progress = analytics.calculateStreak() / achievement.goal; break;
+              case 'focus_master': progress = completedSessions.length / achievement.goal; break;
+              case 'distraction_free': progress = state.blockedSites.length / achievement.goal; break;
+              case 'goal_crusher': progress = this.countDailyGoalDays() / achievement.goal; break;
+              case 'zen_master': progress = totalMinutes / achievement.goal; break;
+              case 'productivity_guru': progress = this.hasHighProductivityWeek() ? 1 : 0; break;
+              case 'social_detox':
+                  const socialSites = ['facebook.com', 'twitter.com', 'instagram.com', 'tiktok.com', 'snapchat.com'];
+                  const blockedSocialCount = state.blockedSites.filter(site => socialSites.includes(site)).length;
+                  progress = blockedSocialCount / socialSites.length;
+                  break;
+              case 'deep_work': progress = completedSessions.filter(s => s.actualDuration >= 60 * 60).length / achievement.goal; break;
+          }
+          return Math.min(progress, 1) * 100;
+        },
+
+        renderAchievements() {
+          elements.achievementsGrid.innerHTML = '';
+          elements.unlockedCount.textContent = state.achievements.length;
+
+          ACHIEVEMENT_DEFS.forEach(achievement => {
+            const isUnlocked = state.achievements.includes(achievement.id);
+            const progress = this.getAchievementProgress(achievement);
+            
+            const achievementEl = document.createElement('div');
+            achievementEl.className = `achievement ${isUnlocked ? 'unlocked' : 'locked'}`;
+            
+            achievementEl.innerHTML = `
+              <div class="achievement-icon">${achievement.icon}</div>
+              <div>
+                <div style="font-weight:600">${achievement.name}</div>
+                <div style="font-size:0.9rem;color:var(--muted);margin-top:2px">${achievement.desc}</div>
+                <div style="font-size:0.8rem;color:var(--primary);margin-top:4px">+${achievement.points} points</div>
+              </div>
+              <div class="achievement-progress-bar" style="width: ${progress}%"></div>
+            `;
+
+            if (isUnlocked) {
+              achievementEl.title = `Unlocked! Earned ${achievement.points} points`;
+            } else {
+              achievementEl.title = `Progress: ${progress.toFixed(0)}%`;
+            }
+
+            elements.achievementsGrid.appendChild(achievementEl);
+          });
+        }
+      };
+
+      // Website blocking system
+      const blockingSystem = {
+        addSite(site) {
+          const cleanSite = site.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+          
+          if (!cleanSite || state.blockedSites.includes(cleanSite)) {
+            utils.showNotification('Site already blocked or invalid', 'warning');
+            return false;
+          }
+
+          state.blockedSites.push(cleanSite);
+          this.renderBlockedSites();
+          utils.saveToStorage(STORAGE_KEYS.BLOCKED_SITES, state.blockedSites);
+          utils.showNotification(`Blocked ${cleanSite}`, 'success');
+          
+          achievementSystem.checkAchievements();
+          return true;
+        },
+
+        removeSite(site) {
+          state.blockedSites = state.blockedSites.filter(s => s !== site);
+          this.renderBlockedSites();
+          utils.saveToStorage(STORAGE_KEYS.BLOCKED_SITES, state.blockedSites);
+          utils.showNotification(`Unblocked ${site}`, 'info');
+        },
+
+        isBlocked(url) {
+          if (!url) return false;
+          const domain = url.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+          return state.blockedSites.some(blocked => domain.includes(blocked));
+        },
+
+        renderBlockedSites() {
+          elements.blockedCount.textContent = state.blockedSites.length;
+          elements.blockedSites.innerHTML = '';
+
+          if (state.blockedSites.length === 0) {
+            elements.blockedSites.innerHTML = '<div style="color:var(--muted);font-style:italic;text-align:center;padding:20px">No blocked sites yet. Add some to improve focus!</div>';
+            return;
+          }
+
+          state.blockedSites.forEach(site => {
+            const siteEl = document.createElement('div');
+            siteEl.className = 'site-tag';
+            siteEl.innerHTML = `
+              <span>${site}</span>
+              <button onclick="blockingSystem.removeSite('${site}')" style="background:none;border:none;color:white;font-weight:800;cursor:pointer">×</button>
+            `;
+            elements.blockedSites.appendChild(siteEl);
+          });
+        }
+      };
+
+      // To-do list management
+      const todoSystem = {
+        addTodo(text) {
+          if (!text) {
+            utils.showNotification('Please enter a task', 'warning');
+            return;
+          }
+          state.todoList.push({ id: Date.now(), text, completed: false });
+          this.renderTodoList();
+          utils.saveToStorage(STORAGE_KEYS.TODO_LIST, state.todoList);
+          utils.showNotification('Task added!', 'info');
+        },
+
+        toggleTodo(id) {
+          const todo = state.todoList.find(t => t.id === id);
+          if (todo) {
+            todo.completed = !todo.completed;
+            this.renderTodoList();
+            utils.saveToStorage(STORAGE_KEYS.TODO_LIST, state.todoList);
+            utils.showNotification(`Task ${todo.completed ? 'completed' : 'un-completed'}`, 'success');
+          }
+        },
+
+        removeTodo(id) {
+          state.todoList = state.todoList.filter(t => t.id !== id);
+          this.renderTodoList();
+          utils.saveToStorage(STORAGE_KEYS.TODO_LIST, state.todoList);
+          utils.showNotification('Task removed', 'warning');
+        },
+
+        clearCompleted() {
+          state.todoList = state.todoList.filter(t => !t.completed);
+          this.renderTodoList();
+          utils.saveToStorage(STORAGE_KEYS.TODO_LIST, state.todoList);
+          utils.showNotification('Completed tasks cleared', 'success');
+        },
+
+        renderTodoList() {
+          elements.todoList.innerHTML = '';
+          if (state.todoList.length === 0) {
+            elements.todoList.innerHTML = '<div style="color:var(--muted);font-style:italic;text-align:center;padding:20px">No tasks yet.</div>';
+            return;
+          }
+
+          state.todoList.forEach(todo => {
+            const todoEl = document.createElement('div');
+            todoEl.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+            todoEl.innerHTML = `
+              <div class="todo-checkbox" onclick="todoSystem.toggleTodo(${todo.id})">
+                <i class="fas fa-check"></i>
+              </div>
+              <div class="todo-item-text">${todo.text}</div>
+              <button onclick="todoSystem.removeTodo(${todo.id})"><i class="fas fa-times"></i></button>
+            `;
+            elements.todoList.appendChild(todoEl);
+          });
+        }
+      };
+
+      // Data management
+      const dataManager = {
+        exportData() {
+          const exportData = {
+            version: '2.1',
+            exported: new Date().toISOString(),
+            user: state.user,
+            sessions: state.sessions,
+            blockedSites: state.blockedSites,
+            todoList: state.todoList,
+            settings: state.settings,
+            achievements: state.achievements
+          };
+
+          const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `focusguard-data-${new Date().toISOString().split('T')[0]}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          utils.showNotification('Data exported successfully!', 'success');
+        },
+
+        resetAll() {
+          if (!confirm('Are you sure you want to reset ALL data? This cannot be undone!')) return;
+          
+          Object.values(STORAGE_KEYS).forEach(key => {
+            localStorage.removeItem(key);
+          });
+
+          state = {
+            user: { name: 'User', avatar: 'U' },
+            currentSession: null,
+            sessions: [],
+            blockedSites: [],
+            settings: { ...DEFAULT_SETTINGS },
+            achievements: [],
+            timer: null,
+            pomodoroPhase: 0,
+            productivity: { score: 0, streak: 0, weeklyGoal: 0 },
+            todoList: []
+          };
+
+          sessionManager.stopTimer();
+          
+          this.initialize();
+          utils.showNotification('All data has been reset', 'info');
+        },
+
+        saveState() {
+          utils.saveToStorage(STORAGE_KEYS.USER_DATA, state.user);
+          utils.saveToStorage(STORAGE_KEYS.SESSIONS, state.sessions);
+          utils.saveToStorage(STORAGE_KEYS.BLOCKED_SITES, state.blockedSites);
+          utils.saveToStorage(STORAGE_KEYS.SETTINGS, state.settings);
+          utils.saveToStorage(STORAGE_KEYS.ACHIEVEMENTS, state.achievements);
+          utils.saveToStorage(STORAGE_KEYS.TODO_LIST, state.todoList);
+          
+          if (state.currentSession) {
+            utils.saveToStorage(STORAGE_KEYS.ACTIVE_SESSION, state.currentSession);
+          } else {
+            localStorage.removeItem(STORAGE_KEYS.ACTIVE_SESSION);
+          }
+        },
+
+        loadState() {
+          const userData = utils.loadFromStorage(STORAGE_KEYS.USER_DATA);
+          if (userData) {
+            state.user = userData;
+          }
+
+          const sessions = utils.loadFromStorage(STORAGE_KEYS.SESSIONS, []);
+          state.sessions = sessions.map(s => ({
+            ...s,
+            startTime: new Date(s.startTime),
+            endTime: s.endTime ? new Date(s.endTime) : null
+          }));
+
+          state.blockedSites = utils.loadFromStorage(STORAGE_KEYS.BLOCKED_SITES, []);
+          state.settings = { ...DEFAULT_SETTINGS, ...utils.loadFromStorage(STORAGE_KEYS.SETTINGS, {}) };
+          state.achievements = utils.loadFromStorage(STORAGE_KEYS.ACHIEVEMENTS, []);
+          state.todoList = utils.loadFromStorage(STORAGE_KEYS.TODO_LIST, []);
+
+          const activeSession = utils.loadFromStorage(STORAGE_KEYS.ACTIVE_SESSION);
+          if (activeSession && activeSession.status === 'active') {
+            const elapsed = Math.floor((Date.now() - new Date(activeSession.startTime).getTime()) / 1000);
+            activeSession.remaining = Math.max(0, activeSession.remaining - elapsed);
+            
+            if (activeSession.remaining > 0) {
+              state.currentSession = {
+                ...activeSession,
+                startTime: new Date(activeSession.startTime)
+              };
+            } else {
+              localStorage.removeItem(STORAGE_KEYS.ACTIVE_SESSION);
+            }
+          }
+        },
+
+        initialize() {
+          this.loadState();
+          
+          elements.userName.value = state.user.name || '';
+          elements.userNameDisplay.textContent = state.user.name || 'User';
+          elements.avatarInitial.textContent = (state.user.name || 'User').charAt(0).toUpperCase();
+          elements.dailyGoal.value = state.settings.dailyGoal;
+          elements.notificationSettings.value = state.settings.notifications;
+          elements.breakDuration.value = state.settings.breakDuration;
+          elements.blockingMode.value = state.settings.blockingMode;
+
+          themeManager.applyTheme(state.settings.theme);
+
+          blockingSystem.renderBlockedSites();
+          analytics.updateStats();
+          analytics.renderWeeklyChart();
+          achievementSystem.renderAchievements();
+          sessionManager.updateUI();
+          todoSystem.renderTodoList();
+
+          if (state.currentSession) {
+            sessionManager.startTimer();
+            sessionManager.updateProgress();
+          }
+
+          this.updateGreeting();
+        },
+
+        updateGreeting() {
+          const hour = new Date().getHours();
+          let greeting, subGreeting;
+
+          if (hour < 6) {
+            greeting = `Night owl, ${state.user.name}! 🌙`;
+            subGreeting = "Late night focus session?";
+          } else if (hour < 12) {
+            greeting = `Good morning, ${state.user.name}! ☀️`;
+            subGreeting = "Ready to make today productive?";
+          } else if (hour < 18) {
+            greeting = `Good afternoon, ${state.user.name}! 🌤️`;
+            subGreeting = "Let's tackle those goals!";
+          } else {
+            greeting = `Good evening, ${state.user.name}! 🌅`;
+            subGreeting = "Time for some focused work?";
+          }
+
+          elements.greeting.innerHTML = greeting;
+          elements.subGreeting.textContent = subGreeting;
+        }
+      };
+
+      const themeManager = {
+          applyTheme(theme) {
+              document.body.className = `theme-${theme}`;
+              state.settings.theme = theme;
+              dataManager.saveState();
+              
+              const allThemeBtns = document.querySelectorAll('.card-body .btn-outline');
+              allThemeBtns.forEach(btn => {
+                  btn.style.borderColor = 'var(--border)';
+              });
+
+              const activeBtn = document.getElementById(`theme-${theme}`);
+              if (activeBtn) {
+                  activeBtn.style.borderColor = 'var(--primary)';
+              }
+          }
+      }
+
+      window.quickAddSite = function(site) {
+        blockingSystem.addSite(site);
+      };
+
+      window.blockingSystem = blockingSystem;
+      window.todoSystem = todoSystem;
+
+      function setupEventListeners() {
+        elements.resetBtn.addEventListener('click', () => {
+          dataManager.resetAll();
+        });
+
+        elements.exportBtn.addEventListener('click', () => {
+          dataManager.exportData();
+        });
+
+        elements.saveName.addEventListener('click', () => {
+          const name = elements.userName.value.trim();
+          if (name) {
+            state.user.name = name;
+            state.user.avatar = name.charAt(0).toUpperCase();
+            elements.userNameDisplay.textContent = name;
+            elements.avatarInitial.textContent = state.user.avatar;
+            dataManager.saveState();
+            dataManager.updateGreeting();
+            utils.showNotification('Profile updated!', 'success');
+          }
+        });
+
+        elements.userName.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            elements.saveName.click();
+          }
+        });
+
+        elements.startBtn.addEventListener('click', () => {
+          if (state.currentSession && state.currentSession.type === 'break') {
+            sessionManager.endBreak();
+            return;
+          }
+          const duration = parseInt(elements.customDuration.value) || parseInt(elements.preset.value);
+          if (duration > 0) {
+            if (sessionManager.start(duration)) {
+              analytics.updateStats();
+            }
+          } else {
+            utils.showNotification('Please select a valid duration', 'warning');
+          }
+        });
+
+        elements.pauseBtn.addEventListener('click', () => {
+          if (state.currentSession?.status === 'active') {
+            sessionManager.pause();
+          } else if (state.currentSession?.status === 'paused') {
+            sessionManager.resume();
+          }
+        });
+
+        elements.preset.addEventListener('change', () => {
+          elements.customDuration.value = elements.preset.value;
+          if (!state.currentSession) {
+            elements.timeDisplay.textContent = utils.formatTime(parseInt(elements.preset.value) * 60);
+          }
+        });
+
+        elements.customDuration.addEventListener('change', () => {
+          const value = parseInt(elements.customDuration.value);
+          if (value > 0 && value <= 180 && !state.currentSession) {
+            elements.timeDisplay.textContent = utils.formatTime(value * 60);
+          }
+        });
+
+        elements.addSiteBtn.addEventListener('click', () => {
+          const site = elements.siteInput.value.trim();
+          if (site && blockingSystem.addSite(site)) {
+            elements.siteInput.value = '';
+          }
+        });
+
+        elements.siteInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            elements.addSiteBtn.click();
+          }
+        });
+        
+        // To-do list event listeners
+        elements.addTodoBtn.addEventListener('click', () => {
+          const task = elements.todoInput.value.trim();
+          if (task) {
+            todoSystem.addTodo(task);
+            elements.todoInput.value = '';
+          } else {
+            utils.showNotification('Please enter a task', 'warning');
+          }
+        });
+        elements.todoInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            elements.addTodoBtn.click();
+          }
+        });
+        elements.clearCompletedBtn.addEventListener('click', () => {
+            todoSystem.clearCompleted();
+        });
+
+
+        elements.dailyGoal.addEventListener('change', () => {
+          state.settings.dailyGoal = parseInt(elements.dailyGoal.value) || 120;
+          dataManager.saveState();
+          analytics.updateStats();
+        });
+
+        elements.notificationSettings.addEventListener('change', () => {
+          state.settings.notifications = elements.notificationSettings.value;
+          dataManager.saveState();
+        });
+
+        elements.breakDuration.addEventListener('change', () => {
+          state.settings.breakDuration = parseInt(elements.breakDuration.value);
+          dataManager.saveState();
+        });
+
+        elements.blockingMode.addEventListener('change', () => {
+          state.settings.blockingMode = elements.blockingMode.value;
+          dataManager.saveState();
+        });
+
+        elements.exportDataBtn.addEventListener('click', () => {
+          dataManager.exportData();
+        });
+
+        elements.viewReportsBtn.addEventListener('click', () => {
+          utils.showNotification('Detailed reports coming in full version!', 'info');
+        });
+
+        elements.themeLightBtn.addEventListener('click', () => themeManager.applyTheme('light'));
+        elements.themeDarkBtn.addEventListener('click', () => themeManager.applyTheme('dark'));
+        elements.themeCosmicBtn.addEventListener('click', () => themeManager.applyTheme('cosmic'));
+        elements.themeSunsetBtn.addEventListener('click', () => themeManager.applyTheme('sunset'));
+        elements.themeOceanBtn.addEventListener('click', () => themeManager.applyTheme('ocean'));
+        elements.themeForestBtn.addEventListener('click', () => themeManager.applyTheme('forest'));
+        elements.themeFireBtn.addEventListener('click', () => themeManager.applyTheme('fire'));
+        elements.themeEmeraldBtn.addEventListener('click', () => themeManager.applyTheme('emerald'));
+        elements.themeVolcanoBtn.addEventListener('click', () => themeManager.applyTheme('volcano'));
+
+
+        window.addEventListener('beforeunload', () => {
+          dataManager.saveState();
+        });
+
+        setInterval(() => {
+          analytics.updateStats();
+        }, 60000);
+
+        setInterval(() => {
+          dataManager.updateGreeting();
+        }, 3600000);
+      }
+
+      function init() {
+        console.log('🚀 Initializing FocusGuard Pro...');
+        dataManager.initialize();
+        setupEventListeners();
+        
+        if (state.sessions.length === 0) {
+          setTimeout(() => {
+            utils.showNotification('Welcome to FocusGuard Pro! Start your first focus session to begin tracking your productivity.', 'info', 6000);
+          }, 1000);
+        }
+        
+        console.log('✅ FocusGuard Pro initialized successfully');
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
